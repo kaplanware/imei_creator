@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IMEI Creator</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row ">
+        <div class="offset-3 col-md-6 card p-5">
+            <form action="javascript:;">
+                <div class="form-group">
+                    <label for="imei" class="font-weight-bold">IMEI </label>
+                    <input type="text" id="imei" class="form-control" maxlength="14" autofocus>
+                </div>
+
+                <div class="form-group">
+                    <label for="times" class="font-weight-bold">x Times</label>
+                    <input type="text" id="times" class="form-control" autofocus>
+                </div>
+
+                <button class="btn btn-primary btn-block mt-3" id="ok" disabled>Create IMEI</button>
+            </form>
+        </div>
+        <div class="col-md-12 card mt-3 p-3 bg-dark d-none" id="allimeibox">
+            <textarea name="" id="imeibox" cols="30" rows="20"></textarea>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $("form").change(function(){
+        if($("#imei").val() != "" && $("#times").val() != ""){
+            if($("#imei").val().length == 14)
+                $("button").prop("disabled", false);
+        }
+        else
+            $("button").prop("disabled", true);
+    })
+    var numbers = [
+        0,
+        2,
+        4,
+        6,
+        8,
+        1,
+        3,
+        5,
+        7,
+        9
+    ];
+
+    $("#ok").click(function(){
+        let imei = $("#imei").val();
+        let times = $("#times").val();
+        var allImeis = "";
+
+        for(let i = 0; i < times; i++){
+            let cift = 0;
+            let tek = 0;
+            for(let k = 0; k < 14; k++){
+                if(k % 2 != 0){
+                    cift += numbers[imei[k]];
+                } else {
+                    tek += parseInt(imei[k]);
+                }
+            }
+            let lastNumber = (Math.ceil((cift + tek) / 10) * 10) - (cift + tek);
+            allImeis += (imei + lastNumber) + "\n";
+            imei = (parseInt(imei) + 1).toString();
+        }
+
+        $("#imeibox").val("");
+        $("#imeibox").val(allImeis);
+        $("#allimeibox").removeClass("d-none");
+
+    })
+</script>
+</body>
+</html>
